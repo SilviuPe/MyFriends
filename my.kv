@@ -1,0 +1,190 @@
+ManageScreens:
+    LogInWindow:
+    MainScreen:
+    RegisterWindow:
+
+<LogInWindow>:
+
+    name : "login_page"
+    username : username
+    password : password 
+
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'bg.jpg'
+
+    MDBoxLayout: 
+        pos_hint : {"center_x":0.5, "center_y": 0.675}
+        size_hint_x: None
+        MDLabel:
+            text : "Autentificare"
+
+    MDBoxLayout:
+
+        pos_hint : {"center_y": 0.8}
+        size_hint: 1,0.13
+        Image:
+            #pos_hint : {"center_x":0.5, "center_y":0.8}
+            #size_hint_x : None
+            source: "united.png"
+
+    MDTextField:
+
+        id : username
+        pos_hint : {"center_x":0.5, "center_y":0.6}
+        icon_right: "account-outline"
+        icon_right_color: 1,1,1,1
+        size_hint_x : None
+        width : 250
+        color_mode : "custom"
+        line_color_normal : 1,1,1,0.3
+        line_color_focus : 1,1,1,1
+
+
+    MDTextField:
+
+        id : password
+        pos_hint : {"center_x":0.5, "center_y": 0.5}
+        size_hint_x : None
+        width : 250
+        password : True
+        password_mask : "*"
+        color_mode : "custom"
+        line_color_normal : 1,1,1,0.3
+        line_color_focus : 1,1,1,1
+        icon_right: "lock"
+        icon_right_color: 1,1,1,1
+
+    
+    MDIconButton:
+        pos_hint : {"center_x":0.5, "center_y": 0.4}
+        icon: "arrow-right"
+        on_release:
+            if root.login(): app.root.current = "main_screen"
+
+
+
+    MDTextButton:
+        color : 1,1,1,0.7
+        text : "Nu ai un cont? Creeaza unul!"
+        pos_hint : {"center_x":0.5, "center_y": 0.3}
+        on_release:
+            app.root.current = "register_window"
+            root.clear_text_fields()
+
+<RegisterWindow>:
+
+    name : "register_window"
+
+    username : username
+    password : password 
+
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'bg.jpg'
+
+    MDBoxLayout: 
+        pos_hint : {"center_x":0.5, "center_y": 0.675}
+        size_hint_x: None
+        MDLabel:
+            text : "Inregistrare"
+
+    MDBoxLayout:
+
+        pos_hint : {"center_y": 0.8}
+        size_hint: 1,0.13
+        Image:
+            source: "united.png"
+
+    MDTextField:
+
+        id : username
+        pos_hint : {"center_x":0.5, "center_y":0.6}
+        icon_right: "account-outline"
+        icon_right_color: 1,1,1,1
+        size_hint_x : None
+        width : 250
+        color_mode : "custom"
+        line_color_normal : 1,1,1,0.3
+        line_color_focus : 1,1,1,1
+
+
+    MDTextField:
+
+        id : password
+        pos_hint : {"center_x":0.5, "center_y": 0.5}
+        size_hint_x : None
+        width : 250
+        password : True
+        password_mask : "*"
+        color_mode : "custom"
+        line_color_normal : 1,1,1,0.3
+        line_color_focus : 1,1,1,1
+        icon_right: "lock"
+        icon_right_color: 1,1,1,1
+
+    
+    MDIconButton:
+        pos_hint : {"center_x":0.5, "center_y": 0.4}
+        icon: "arrow-right"
+        on_release: 
+            app.root.current = "login_page" if root.register() else "register_window"
+
+    MDTextButton:
+        color : 1,1,1,0.7
+        text : "Ai deja un cont? Conecteaza-te la acesta!"
+        pos_hint : {"center_x":0.5, "center_y": 0.3}
+        on_release:
+            app.root.current = "login_page"
+            root.clear_text_fields()
+
+<CustomLabel>:
+    size_hint_y: None
+    text_size: self.width, None
+    height: self.texture_size[1]
+    markup : True
+    md_bg_color : 0,0,0,0.1
+
+<MainScreen>:
+    name : "main_screen"
+    messages : messages
+    text: text
+    
+    canvas.before:
+        Rectangle:
+            pos: self.pos
+            size: self.size
+            source: 'bg.jpg'
+
+    ScrollView:
+        size_hint : 1,0.88
+        pos_hint : {"x":0.01, "y":0.1}
+        bar_width: 5
+        effect_cls: "ScrollEffect"
+        scroll_type: ['bars']
+        
+        GridLayout:
+            id: messages
+            cols: 1
+            spacing: 10
+            size_hint_y: None
+            height: self.minimum_height
+
+    MDTextField:
+        id: text
+        size_hint : 0.8075,0.1
+        multiline : True
+        mode : "rectangle"
+        hint_text : "Type...."
+        line_color_normal : 1,1,1,0.3
+        line_color_focus : 1,1,1,1
+
+    MDFlatButton:
+        text : "Send"
+        size_hint : 0.2,0.09
+        pos_hint : {"center_x" : 0.915}
+        on_release: root.send()
